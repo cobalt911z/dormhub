@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KMUTNB Dorm Hub | รวมหอพักรอบรั้ว มจพ. สำหรับนักศึกษาใหม่</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="site-header">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="KMUTNB Dorm Hub หน้าแรก">
+        <span class="brand-mark">KM</span>
+        <span class="brand-copy"><strong>KMUTNB Dorm Hub</strong><small>ที่พักรอบมหาวิทยาลัย กรุงเทพฯ</small></span>
+      </a>
+      <nav class="main-nav" aria-label="เมนูหลัก">
+        <a href="#dorm-search">ค้นหาที่พัก</a>
+        <a href="#cms">จัดการประกาศ</a>
+      </nav>
+      <div class="header-actions">
+        <a class="group-link" href="https://www.facebook.com/groups/197822284350539" target="_blank" rel="noopener noreferrer">กลุ่ม Facebook</a>
+        <button class="button button-primary" onclick="openAddModal()">เพิ่มประกาศ</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & Zone Guide for Freshmen -->
+  <section class="hero-band" id="top">
+    <div class="shell hero-layout">
+      <div class="hero-copy">
+        <p class="eyebrow">คู่มือที่พักสำหรับนักศึกษา มจพ. กรุงเทพฯ</p>
+        <h1 class="hero-title">เริ่มหาหอที่ใช่<br>รอบ <em>มจพ.</em></h1>
+        <p class="hero-copy-text">ค้นหาที่พักใกล้มหาวิทยาลัย เทียบราคาและระยะทาง แล้วเปิดข้อมูลจากแหล่งประกาศก่อนติดต่อผู้ให้เช่า</p>
+        <div class="hero-facts" aria-label="ภาพรวมข้อมูล">
+        <div class="hero-fact"><strong>ราคาจากต้นทาง</strong><span>เช็กราคาและช่วงราคา</span></div>
+        <div class="hero-fact"><strong>ระยะทางอ้างอิง</strong><span>เทียบระยะใกล้ มจพ.</span></div>
+        <div class="hero-fact"><strong>เปิดประกาศจริง</strong><span>ตรวจรูปและห้องว่างกับผู้ลงประกาศ</span></div>
+        </div>
+        <p class="disclaimer">รายการที่มีแหล่งอ้างอิงนำมาจากหน้า RentHub ที่เปิดเผยต่อสาธารณะ ไม่ใช่คลังโพสต์ทั้งหมดในกลุ่ม Facebook<br>ข้อมูลราคาและห้องว่างอาจเปลี่ยนแปลง โปรดตรวจสอบกับผู้ลงประกาศก่อนตัดสินใจ</p>
+      </div>
+      <aside class="calc-panel" aria-labelledby="calcTitle">
+        <span class="calc-kicker">MONTHLY COST ESTIMATE</span>
+        <h3 id="calcTitle">คำนวณค่าใช้จ่ายต่อเดือน</h3>
+        <p>ปรับการใช้ไฟ แล้วดูยอดประมาณการบนรายการหอพักทุกใบ</p>
+        <div class="calc-value"><strong id="elecUnitLabel">150</strong><span>หน่วยไฟฟ้าต่อเดือน</span></div>
+        <input id="elecUnitsInput" class="calc-range" type="range" min="50" max="400" step="10" value="150" oninput="updateCalculator()" aria-label="ปริมาณไฟฟ้าที่ใช้ต่อเดือน">
+        <div class="range-labels"><span>50 หน่วย</span><span>400 หน่วย</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="shell main-content">
+    <section class="search-section" id="dorm-search">
+      <div class="results-heading">
+        <div><h2>ที่พักใกล้ มจพ.</h2><p>ราคาและระยะทางอ้างอิงจากประกาศต้นทาง · ตรวจสอบรายละเอียดล่าสุดก่อนติดต่อ</p></div>
+        <span id="resultCount" aria-live="polite"></span>
+      </div>
+      <div class="filter-panel">
+        <div class="filter-grid">
+          <div class="search-field">
+            <label class="field-label" for="searchInput">คำค้นหา</label>
+            <input id="searchInput" class="filter-control" type="search" oninput="renderDorms()" placeholder="ชื่อหอ ซอย หรือสิ่งอำนวยความสะดวก">
+          </div>
+          <div>
+            <label class="field-label" for="zoneSelect">ย่านที่ตั้ง</label>
+            <select id="zoneSelect" class="filter-control" onchange="renderDorms()">
+              <option value="all">ทุกย่าน</option>
+              <option value="ใกล้ มจพ. (อ้างอิง RentHub)">ใกล้ มจพ. (อ้างอิง RentHub)</option>
+              <option value="ถนนพิบูลสงคราม / บางซื่อ">ถนนพิบูลสงคราม / บางซื่อ</option>
+              <option value="MRT วงศ์สว่าง / ถนนวงศ์สว่าง">MRT วงศ์สว่าง / ถนนวงศ์สว่าง</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="priceSelect">งบค่าเช่าสูงสุด</label>
+            <select id="priceSelect" class="filter-control" onchange="renderDorms()">
+              <option value="99999">ไม่จำกัด</option>
+              <option value="3500">ไม่เกิน 3,500 บาท</option>
+              <option value="4500">ไม่เกิน 4,500 บาท</option>
+              <option value="6000">ไม่เกิน 6,000 บาท</option>
+              <option value="8500">ไม่เกิน 8,500 บาท</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="typeSelect">ประเภทที่พัก</label>
+            <select id="typeSelect" class="filter-control" onchange="renderDorms()">
+              <option value="all">ทุกประเภท</option>
+              <option value="หอพักรายเดือน">หอพักรายเดือน</option>
+              <option value="หอหญิงล้วน">หอหญิงล้วน</option>
+              <option value="คอนโดปล่อยเช่า">คอนโดปล่อยเช่า</option>
+              <option value="ขายสัญญาหอ / หารูมเมท">ขายสัญญาหอ / หารูมเมท</option>
+              <option value="ที่พักระยะสั้น">ที่พักระยะสั้น</option>
+              <option value="บ้านเช่า/ทาวน์เฮาส์">บ้านเช่า/ทาวน์เฮาส์</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-footer">
+          <div class="quick-filters">
+            <span class="quick-label">ตัวกรองด่วน</span>
+            <label class="check-label"><input type="checkbox" id="chkGovElec" onchange="renderDorms()"> ค่าไฟหลวง</label>
+            <label class="check-label"><input type="checkbox" id="chkLift" onchange="renderDorms()"> มีลิฟต์</label>
+            <label class="check-label"><input type="checkbox" id="chkPet" onchange="renderDorms()"> เลี้ยงสัตว์ได้</label>
+          </div>
+          <div class="filter-tools">
+            <button class="filter-reset" type="button" onclick="resetFilters()">ล้างตัวกรอง</button>
+            <a class="manage-link" href="#cms">เปิดระบบจัดการประกาศ</a>
+          </div>
+        </div>
+      </div>
+      <div id="dormGrid" class="dorm-grid"></div>
+      <p class="source-note">ภาพห้องพักและข้อมูลติดต่อ ให้เปิดประกาศต้นทางเพื่อดูเนื้อหาล่าสุด เว็บไซต์นี้ไม่คัดลอกรูปจากผู้ลงประกาศโดยไม่ได้รับอนุญาต</p>
+    </section>
+    <section id="dormDetail" class="detail-page" hidden aria-live="polite"></section>
+    <section id="cmsDashboard" class="cms-shell" hidden>
+      <div class="cms-heading">
+        <div><h1>จัดการประกาศ</h1><p>จัดระเบียบ ตรวจแก้ และควบคุมรายการที่แสดงในหน้านี้</p></div>
+        <div class="cms-actions">
+          <button class="cms-button" type="button" onclick="document.getElementById('jsonFileInput').click()">นำเข้า JSON</button>
+          <button class="cms-button" type="button" onclick="exportJSON()">ส่งออกข้อมูล</button>
+          <button class="cms-button primary" type="button" onclick="openAddModal()">＋ เพิ่มประกาศ</button>
+          <input id="jsonFileInput" type="file" accept="application/json,.json" hidden onchange="importJSON(event)">
+        </div>
+      </div>
+      <p class="cms-notice"><strong>ข้อควรระวัง:</strong> CMS นี้ไม่มีระบบสมาชิกหรือการยืนยันตัวตน อย่าเก็บข้อมูลอ่อนไหวในเครื่องสาธารณะ ก่อนเผยแพร่ต้องตรวจสิทธิการใช้รูป/ข้อความและฐานกฎหมายของข้อมูลติดต่อ การกดเผยแพร่ที่นี่ไม่เปลี่ยนเว็บไซต์จริงจนกว่าจะอัปเดตไฟล์และ deploy</p>
+      <div class="cms-stats">
+        <div class="cms-stat"><span>ประกาศทั้งหมด</span><strong id="cmsTotal">0</strong></div>
+        <div class="cms-stat"><span>กำลังแสดง</span><strong id="cmsPublished">0</strong></div>
+        <div class="cms-stat"><span>ฉบับร่าง / ซ่อนอยู่</span><strong id="cmsDrafts">0</strong></div>
+      </div>
+      <div class="cms-panel">
+        <div class="cms-panel-head"><h2>รายการที่พัก</h2><span id="cmsUpdated" class="source-note"></span></div>
+        <div class="cms-list-tools">
+          <div class="cms-list-filters">
+            <div class="cms-list-search"><label for="cmsSearchInput">ค้นหารายการ</label><input id="cmsSearchInput" type="search" placeholder="ชื่อหอ โซน หรือรายละเอียด" oninput="renderCms()"></div>
+            <div><label for="cmsStatusFilter">สถานะประกาศ</label><select id="cmsStatusFilter" onchange="renderCms()"><option value="all">ทุกสถานะ</option><option value="published">กำลังแสดง</option><option value="draft">ฉบับร่าง / ซ่อนอยู่</option></select></div>
+            <div><label for="cmsAvailabilityFilter">สถานะห้อง</label><select id="cmsAvailabilityFilter" onchange="renderCms()"><option value="all">ทุกสถานะห้อง</option><option value="available">มีห้องว่าง</option><option value="full">ห้องเต็ม</option><option value="unknown">กรุณาสอบถาม</option></select></div>
+          </div>
+          <div class="cms-bulk-toolbar">
+            <label class="cms-select-visible"><input id="cmsSelectAll" type="checkbox" onchange="toggleVisibleCmsSelection(this.checked)"> เลือกทั้งหมดในผลลัพธ์</label>
+            <span id="cmsSelectionCount" aria-live="polite">เลือก 0 รายการ</span>
+            <div class="cms-bulk-actions">
+              <button id="cmsBulkPublish" type="button" onclick="bulkUpdatePublished(true)" disabled>เผยแพร่ที่เลือก</button>
+              <button id="cmsBulkHide" type="button" onclick="bulkUpdatePublished(false)" disabled>ซ่อนที่เลือก</button>
+              <button id="cmsBulkDelete" type="button" onclick="bulkDeleteSelected()" disabled>ลบที่เลือก</button>
+              <button id="cmsClearSelection" type="button" onclick="clearCmsSelection()" disabled>ล้างที่เลือก</button>
+            </div>
+          </div>
+          <p id="cmsFilterCount" class="cms-filter-count" aria-live="polite"></p>
+        </div>
+        <div class="cms-table-wrap"><table class="cms-table">
+          <thead><tr><th class="cms-select-column"><span class="sr-only">เลือก</span></th><th>ชื่อประกาศ</th><th>ค่าเช่า/เดือน</th><th>ห้องว่าง</th><th>สถานะ CMS</th><th>จัดการ</th></tr></thead>
+          <tbody id="cmsRows"></tbody>
+        </table></div>
+        <div class="cms-settings">
+          <div><label for="supportUrlInput">ช่องทางติดต่อเพื่อแก้ข้อมูล / แจ้งปัญหา (URL)</label><input id="supportUrlInput" type="url" placeholder="https://www.facebook.com/groups/197822284350539"></div>
+          <button class="cms-button" type="button" onclick="saveSupportSettings()">บันทึกช่องทางติดต่อ</button>
+        </div>
+      </div>
+      <section class="cms-panel site-tools-panel" aria-labelledby="siteToolsHeading">
+        <div class="cms-panel-head"><div><h2 id="siteToolsHeading">สถิติ ธีม และป๊อปอัป</h2><p>ปรับธีมและสื่อประชาสัมพันธ์ พร้อมตั้งค่าการวัดผลสำหรับเว็บที่ deploy</p></div></div>
+        <div class="cms-tools-content">
+          <div class="cms-notice"><strong>เว็บไซต์แบบ static:</strong> Google Analytics จะเริ่มวัดผลเมื่อใส่ Measurement ID และผู้เข้าชมยินยอม การตั้งค่าที่บันทึกใน CMS นี้อยู่ในเบราว์เซอร์นี้เท่านั้น กดดาวน์โหลดไฟล์ config แล้วแทนที่ <code>data/site-config.js</code> และ push ขึ้น GitHub เพื่อให้ผู้เข้าชมทุกคนเห็นการตั้งค่า</div>
+          <div class="analytics-settings">
+            <div>
+              <label for="gaMeasurementId">Google Analytics 4 Measurement ID</label>
+              <input id="gaMeasurementId" type="text" inputmode="text" autocomplete="off" placeholder="G-XXXXXXXXXX">
+              <small>สร้าง GA4 property แล้วคัดลอกรหัส G-… จากหน้า Data streams · ไม่ต้องใส่รหัสลับ</small>
+            </div>
+            <div class="analytics-actions">
+              <span id="analyticsStatus" class="cms-status draft">ยังไม่ได้ตั้งค่า</span>
+              <button id="analyticsPrivacyLink" class="cms-button" type="button" onclick="showAnalyticsConsent()" hidden>จัดการความยินยอม</button>
+            </div>
+          </div>
+          <p class="analytics-help">รายงานจำนวนผู้เข้าชมทั้งหมด/รายเดือน และ event เช่น เปิดรายละเอียด กดลิงก์ประกาศ/แผนที่ ใช้ตัวกรอง และกดโฆษณา ดูได้ใน Google Analytics → Reports/Events · จะไม่มีข้อมูลย้อนหลังของช่วงก่อนติดตั้ง และหน้านี้ไม่เรียก API รายงานแทน Google</p>
+          <div class="cms-tools-grid theme-settings">
+            <div>
+              <label for="siteTheme">ธีมหน้าเว็บ</label>
+              <select id="siteTheme" onchange="previewSiteTheme()">
+                <option value="default">ปกติ · KMUTNB</option>
+                <option value="songkran">สงกรานต์ · ฟ้าน้ำ / ส้มสด</option>
+                <option value="loy-krathong">ลอยกระทง · คราม / ทอง</option>
+                <option value="new-year">ปีใหม่ · เขียวสน / ทอง</option>
+                <option value="mourning">ไว้อาลัย · สุภาพ ขาวดำ</option>
+              </select>
+              <p id="themePreviewStatus" class="settings-feedback" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="popup-config">
+            <div class="popup-config-heading">
+              <div><h3>ป๊อปอัปประกาศ / โฆษณา</h3><p>แสดงหลังเปิดหน้าเว็บ 5 วินาที ปิดได้เสมอ ตัวอย่างไม่บันทึกค่า และเลือกระยะเวลาการแสดงได้</p></div>
+              <label class="popup-toggle"><input id="popupEnabled" type="checkbox"> เปิดป๊อปอัป</label>
+            </div>
+            <div class="cms-tools-grid">
+              <div><label for="popupTitle">หัวข้อ</label><input id="popupTitle" type="text" maxlength="100" placeholder="เช่น โปรโมชันหอพักเปิดใหม่"></div>
+              <div><label for="popupMessage">ข้อความ</label><textarea id="popupMessage" rows="2" maxlength="300" placeholder="รายละเอียดสั้น ๆ ที่ต้องการแจ้ง"></textarea></div>
+              <div class="popup-image-field"><label for="popupImageUrl">ลิงก์รูปภาพ HTTPS</label><input id="popupImageUrl" type="url" placeholder="https://.../banner.webp" oninput="updatePopupImagePreview()"><div class="popup-image-preview"><img id="popupImagePreview" alt="ตัวอย่างรูปป๊อปอัป" hidden><span id="popupImagePreviewStatus" aria-live="polite">ใส่ URL เพื่อดูตัวอย่างภาพ</span></div></div>
+              <div><label for="popupCtaText">ข้อความบนปุ่ม (ไม่บังคับ)</label><input id="popupCtaText" type="text" maxlength="40" placeholder="ดูรายละเอียด"></div>
+              <div><label for="popupCtaUrl">ลิงก์ปุ่ม HTTPS (ไม่บังคับ)</label><input id="popupCtaUrl" type="url" placeholder="https://..."></div>
+              <div><label for="popupFrequency">ความถี่</label><select id="popupFrequency"><option value="daily">วันละครั้ง</option><option value="session">ครั้งเดียวต่อแท็บ</option></select></div>
+            </div>
+            <p id="siteSettingsStatus" class="settings-feedback" aria-live="polite">ค่าที่บันทึกไว้ใช้กับเบราว์เซอร์นี้</p>
+            <div class="cms-actions popup-actions">
+              <button class="cms-button" type="button" onclick="restoreSiteSettings()">คืนค่าที่บันทึก</button>
+              <button class="cms-button" type="button" onclick="previewPopup()">ดูตัวอย่างป๊อปอัป</button>
+              <button class="cms-button primary" type="button" onclick="saveSiteSettings()">บันทึกธีมและป๊อปอัป</button>
+              <button class="cms-button" type="button" onclick="exportSiteConfig()">ดาวน์โหลด config สำหรับเว็บ</button>
+            </div>
+            <p class="analytics-help">ขั้นตอนเผยแพร่: บันทึกหรือดาวน์โหลด config → นำไฟล์ไปแทนที่ <code>data/site-config.js</code> → push ขึ้น GitHub Pages</p>
+          </div>
+        </div>
+      </section>
+      <a class="detail-back" href="#dorm-search">← กลับไปหน้าค้นหาที่พัก</a>
+    </section>
+  </main>
+
+  <!-- Modal: Add / Smart Import from FB Group -->
+  <div id="addModal" class="modal-overlay hidden items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="addModalTitle">
+    <div class="modal-panel" tabindex="-1">
+      <div class="flex justify-between items-center border-b pb-3 mb-4">
+        <div>
+          <h3 id="addModalTitle" class="font-bold text-lg text-slate-900">เพิ่มประกาศที่พัก</h3>
+          <p class="text-xs text-slate-500">ก๊อปข้อความจากกลุ่ม <a href="https://www.facebook.com/groups/197822284350539" target="_blank" class="text-orange-600 underline">หอพัก มจพ.</a> มาวางเพื่อให้ระบบสกัดข้อมูลอัตโนมัติ</p>
+        </div>
+        <button onclick="closeModal('addModal')" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+      </div>
+      <p class="modal-local-note">รายการที่บันทึกจะอยู่ในเบราว์เซอร์นี้เท่านั้น ยังไม่ได้เผยแพร่ให้ผู้เข้าชมคนอื่น</p>
+
+      <!-- Smart FB Post Parser Box -->
+      <div class="bg-orange-50 border border-orange-200 rounded-xl p-3.5 mb-4">
+        <label class="block text-xs font-bold text-orange-900 mb-1">
+          📋 วางข้อความโพสต์จากกลุ่ม Facebook ที่นี่ (ระบบจะแยกชื่อหอ ราคา ค่าน้ำ/ไฟ เบอร์โทรให้อัตโนมัติ)
+        </label>
+        <textarea id="fbRawText" rows="3"
+          placeholder="ตัวอย่าง: ขายสัญญาหอ / ปล่อยเช่าหอพักสุขใจ ซอยวงศ์สว่าง 11 แยก 3 เดือนละ 3,800 บาท ประกัน 5,000 น้ำ 18 ไฟ 7 บาท มีแอร์ เครื่องทำน้ำอุ่น ลิฟต์ คีย์การ์ด โทร 081-234-5678..."
+          class="w-full border border-orange-300 rounded-lg p-2.5 text-xs focus:outline-none focus:border-orange-600"></textarea>
+        <div class="flex justify-end mt-2">
+          <button type="button" onclick="parseFacebookPost()"
+            class="bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg transition">
+            🪄 สกัดข้อมูลจากข้อความโพสต์
+          </button>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form onsubmit="saveDorm(event)" class="space-y-3 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="font-semibold block mb-1">ชื่อหอพัก / หัวข้อประกาศ *</label>
+            <input id="fName" required type="text" placeholder="เช่น หอพักบ้านศรีพรหม ซ.วงศ์สว่าง 11" class="w-full border rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="font-semibold block mb-1" for="fZone">โซนที่ตั้ง *</label>
+            <input id="fZone" required type="text" list="dormZoneSuggestions" maxlength="120" placeholder="เช่น ซอยวงศ์สว่าง 11 แยก 3" class="w-full border rounded-lg px-3 py-2" />
+            <datalist id="dormZoneSuggestions">
+              <option value="ใกล้ มจพ. (อ้างอิง RentHub)"></option>
+              <option value="ซอยวงศ์สว่าง 11"></option>
+              <option value="ประชาราษฎร์สาย 1 (หน้า ม.)"></option>
+              <option value="MRT วงศ์สว่าง / ถนนวงศ์สว่าง"></option>
+              <option value="สะพานพระราม 7 / จรัญฯ"></option>
+              <option value="ถนนพิบูลสงคราม / บางซื่อ"></option>
+            </datalist>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div>
+            <label class="font-semibold block mb-1">ค่าเช่าต่ำสุด *</label>
+            <input id="fPrice" required type="number" min="0" placeholder="3800" class="w-full border rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="font-semibold block mb-1">ค่าเช่าสูงสุด</label>
+            <input id="fPriceMax" type="number" min="0" placeholder="เว้นว่างถ้าราคาเดียว" class="w-full border rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="font-semibold block mb-1">ค่าไฟ/หน่วย</label>
+            <input id="fElec" type="number" min="0" step="0.1" placeholder="ไม่ระบุ" class="w-full border rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="font-semibold block mb-1">ค่าน้ำ/เดือน</label>
+            <input id="fWater" type="number" min="0" placeholder="ไม่ระบุ" class="w-full border rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="font-semibold block mb-1">ประเภท</label>
+            <select id="fType" class="w-full border rounded-lg px-3 py-2">
+              <option value="หอพักรายเดือน">หอพักรายเดือน</option>
+              <option value="หอหญิงล้วน">หอหญิงล้วน</option>
+              <option value="คอนโดปล่อยเช่า">คอนโดปล่อยเช่า</option>
+              <option value="ขายสัญญาหอ / หารูมเมท">ขายสัญญาหอ / หารูมเมท</option>
+              <option value="ที่พักระยะสั้น">ที่พักระยะสั้น</option>
+              <option value="บ้านเช่า/ทาวน์เฮาส์">บ้านเช่า/ทาวน์เฮาส์</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="font-semibold block mb-1">ระยะทางไป มจพ.</label>
+            <input id="fDistance" type="text" placeholder="เดิน 5 นาทีถึงประตูหลัง ม." class="w-full border rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="font-semibold block mb-1">เบอร์โทร / LINE ติดต่อ</label>
+            <input id="fContact" type="text" placeholder="08x-xxx-xxxx / Line: @..." class="w-full border rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="font-semibold block mb-1">เงินประกัน / มัดจำ (บาท)</label>
+            <input id="fDeposit" type="number" min="0" step="1" placeholder="ไม่ระบุ" class="w-full border rounded-lg px-3 py-2" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="font-semibold block mb-1">ลิงก์แหล่งประกาศต้นทาง (ถ้ามี)</label>
+            <input id="fSourceUrl" type="url" placeholder="https://..." class="w-full border rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="font-semibold block mb-1">ลิงก์รูปภาพที่พัก (ถ้ามี)</label>
+            <textarea id="fImageUrls" rows="3" placeholder="วาง URL รูปภาพ HTTPS หนึ่ง URL ต่อบรรทัด" class="w-full border rounded-lg px-3 py-2"></textarea>
+            <p class="mt-1 text-slate-500">ใส่ได้หลายรูป โดยใช้เฉพาะรูปที่คุณมีสิทธิ์นำมาแสดง</p>
+            <div id="dormImagePreview" class="dorm-image-preview" aria-live="polite"></div>
+          </div>
+          <div>
+            <label class="font-semibold block mb-1" for="fMapUrl">ลิงก์ Google Maps / ตำแหน่ง</label>
+            <input id="fMapUrl" type="url" placeholder="https://www.google.com/maps/..." class="w-full border rounded-lg px-3 py-2" />
+            <p class="mt-1 text-slate-500">ถ้าเป็นผลค้นหาพื้นที่ ไม่ใช่หมุดที่ยืนยันแล้ว ให้ระบุในรายละเอียด · <a id="fMapPreviewLink" href="#" target="_blank" rel="noopener noreferrer" hidden>เปิดตรวจตำแหน่ง ↗</a></p>
+          </div>
+          <div>
+            <label class="font-semibold block mb-1" for="fPhotoUrls">ลิงก์รูปจากโพสต์ต้นทาง (ถ้ามี)</label>
+            <textarea id="fPhotoUrls" rows="3" placeholder="วางลิงก์รูป/อัลบั้ม Facebook หนึ่ง URL ต่อบรรทัด" class="w-full border rounded-lg px-3 py-2"></textarea>
+            <p class="mt-1 text-slate-500">ลิงก์ใช้ตรวจรูปในโพสต์ต้นทาง รูปจะไม่ถูกคัดลอกหรือแสดงซ้ำบนหน้าสาธารณะ</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="font-semibold block mb-1">สิ่งอำนวยความสะดวก (คั่นด้วยลูกน้ำ ,)</label>
+          <input id="fTags" type="text" placeholder="แอร์, เครื่องทำน้ำอุ่น, ลิฟต์, คีย์การ์ด, ฟรี Wi-Fi" class="w-full border rounded-lg px-3 py-2" />
+        </div>
+
+        <div class="flex flex-wrap gap-5">
+          <label class="inline-flex items-center gap-2 font-medium text-amber-800"><input id="fSponsored" type="checkbox" class="accent-orange-600"> ⭐ ปักหมุดเป็นรายการแนะนำ</label>
+          <label class="inline-flex items-center gap-2 font-medium text-teal-800"><input id="fPublished" type="checkbox" class="accent-orange-600"> แสดงประกาศบนหน้าค้นหา (ตรวจสอบก่อน)</label>
+        </div>
+        <div>
+          <label class="font-semibold block mb-1" for="fAvailability">สถานะห้องว่าง</label>
+          <select id="fAvailability" class="w-full border rounded-lg px-3 py-2">
+            <option value="unknown">ยังไม่ทราบ / กรุณาสอบถาม</option>
+            <option value="available">มีห้องว่าง</option>
+            <option value="full">ห้องเต็ม</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-semibold block mb-1">รายละเอียดเพิ่มเติม / รีวิวจากรุ่นพี่</label>
+          <textarea id="fDesc" rows="2" placeholder="บรรยากาศหอ ของกินรอบหอ เงื่อนไขสัญญา..." class="w-full border rounded-lg px-3 py-2"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="closeModal('addModal')" class="px-4 py-2 rounded-lg border text-slate-600 hover:bg-slate-100">ยกเลิก</button>
+          <button id="saveDormButton" type="submit" class="px-5 py-2 rounded-lg bg-orange-600 hover:bg-orange-700 text-white font-semibold shadow">💾 บันทึกข้อมูลหอพัก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="analyticsConsent" class="analytics-consent" role="dialog" aria-labelledby="consentHeading" aria-describedby="consentDescription" hidden>
+    <div><strong id="consentHeading">ช่วยให้เราปรับปรุงเว็บได้ไหม?</strong><p id="consentDescription">Google Analytics จะเก็บสถิติการเข้าชมและการกดใช้งานหลังจากคุณยินยอมเท่านั้น เราไม่ส่งคำค้นหรือข้อมูลที่กรอกในฟอร์ม <a href="privacy.html">อ่านนโยบายความเป็นส่วนตัว</a></p></div>
+    <div><button id="consentReject" type="button" onclick="setAnalyticsConsent(false)">ไม่ยินยอม</button><button type="button" class="consent-accept" onclick="setAnalyticsConsent(true)">ยินยอม</button></div>
+  </div>
+
+  <div id="promoPopup" class="promo-overlay" role="dialog" aria-modal="true" aria-labelledby="promoTitle" hidden>
+    <section class="promo-card">
+      <button class="promo-close" type="button" aria-label="ปิดป๊อปอัป" onclick="closePopup()">×</button>
+      <div class="promo-image-wrap"><img id="promoImage" alt=""><p id="promoImageError" hidden>โหลดรูปไม่ได้ · ตรวจสอบ URL รูปภาพใน CMS</p></div>
+      <div class="promo-copy">      <p id="promoLabel" class="promo-label">ประกาศประชาสัมพันธ์</p><h2 id="promoTitle"></h2><p id="promoMessage"></p><a id="promoCta" class="button button-primary" target="_blank" rel="noopener noreferrer" data-analytics-event="promo_click" hidden></a></div>
+    </section>
+  </div>
+
+  <dialog id="imageLightbox" class="image-lightbox" aria-label="ดูภาพที่พักขนาดเต็ม">
+    <div class="lightbox-toolbar">
+      <span id="lightboxCaption" aria-live="polite"></span>
+      <button id="lightboxClose" class="lightbox-close" type="button" aria-label="ปิดภาพเต็ม" onclick="closeImageLightbox()">ปิด <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="lightbox-stage">
+      <button id="lightboxPrevious" class="lightbox-nav previous" type="button" aria-label="ดูรูปก่อนหน้า" onclick="moveLightboxImage(-1)">‹</button>
+      <img id="lightboxImage" alt="">
+      <button id="lightboxNext" class="lightbox-nav next" type="button" aria-label="ดูรูปถัดไป" onclick="moveLightboxImage(1)">›</button>
+    </div>
+    <p class="lightbox-hint">ใช้ปุ่มลูกศรซ้าย/ขวาเพื่อเปลี่ยนรูป · กด Escape เพื่อปิด</p>
+  </dialog>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <div><p>© 2026 KMUTNB Dorm Hub · คู่มือหาที่พักสำหรับนักศึกษาใหม่ มจพ.</p><p style="margin-top:5px">ข้อมูลประกาศมาจากแหล่งภายนอก โปรดยืนยันราคา ห้องว่าง และเงื่อนไขกับผู้ลงประกาศ</p></div>
+      <p>อ้างอิงชุมชน: <a href="https://www.facebook.com/groups/197822284350539" target="_blank" rel="noopener noreferrer">กลุ่มหอพัก มจพ. บน Facebook</a> · <a href="privacy.html">นโยบายความเป็นส่วนตัว</a></p>
+    </div>
+    <div class="shell contact-strip">
+      <div><strong>พบข้อมูลผิด หรือมีปัญหาในการใช้งาน?</strong><span>แจ้งแก้ไขรายละเอียดหรือส่งข้อมูลประกาศเพิ่มเติมได้ที่กลุ่มหอพัก มจพ.</span></div>
+      <div class="footer-tools"><button id="analyticsPrivacyFooter" type="button" onclick="showAnalyticsConsent()" hidden>ตั้งค่าความยินยอม</button><a id="siteSupportLink" href="https://www.facebook.com/groups/197822284350539" target="_blank" rel="noopener noreferrer">ติดต่อ / แจ้งปัญหา ↗</a></div>
+    </div>
+  </footer>
+
+  <script src="data/listings.js"></script>
+  <script src="data/site-config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+const RENTHUB_LISTINGS = [
+  ["TheResrtApartment@Prachachuen", "theresrtapartment-prachachuen", 5800, 7000, 3.3],
+  ["BANGPHO 32 (Short Term Rental)", "bangpho-32-short-term-rental", 5500, 8500, 1.2, "ที่พักระยะสั้น"],
+  ["The Light Residence", "the-light-residence", 5000, 8000, 0.9],
+  ["Kantipar Residence Saphankwai", "kantipar-residence-saphankwai", 7200, 9500, 4.0],
+  ["INGOUN 3 RESIDENCE", "ingoun-3-residence", 2900, 4690, 1.3],
+  ["Sanctuary+", "sanctuary", 5000, 5500, 4.1],
+  ["Novel Apartment", "novel-apartment", 4700, 5000, 3.0],
+  ["Irene Place", "irene-place", 4700, 6500, 3.8],
+  ["S.V. Place | Charan", "s-v-place-charan", 3400, 3900, 3.8],
+  ["BK Mansion", "bk-mansion", 3500, 3500, 1.9],
+  ["Jew Residence", "jew-residence", 6000, 6500, 4.4],
+  ["Better Place: Rama5", "better-place-rama5", 4700, 10400, 2.2],
+  ["Baan Suan Somboon", "baan-suan-somboon", 4000, 4200, 1.9],
+  ["Raewadee 7 Mansion", "raewadee-7-mansion", 3800, 4800, 3.5],
+  ["Bannsabai", "bannsabai", 3500, 3500, 4.5],
+  ["m.s mansion", "m-s-mansion", 5000, 6000, 1.6, "ที่พักระยะสั้น"],
+  ["Anyada Residence", "anyada-residence", 5500, 15000, 1.7, "ที่พักระยะสั้น"],
+  ["Krittiga Apartment", "krittiga-apartment", 3800, 4200, 3.4],
+  ["FIN rewadee19 apartment", "fin-rewadee19-apartment", 4900, 5200, 3.9],
+  ["Phet street", "phet-street", 3900, 7000, 1.9, "ที่พักระยะสั้น"],
+  ["J.R. apartment", "j-r-apartment--3d1b0511", 2500, 4500, 4.3],
+  ["W Place Nontaburi", "w-place-nontaburi", 3500, 6000, 2.1],
+  ["P22 Apartment", "p22-apartment", 3500, 3500, 1.6],
+  ["Rachamansion", "rachamansion", 3000, 3800, 2.7],
+  ["Napha Residence", "napha-residence", 6500, 7000, 4.1],
+  ["TG Place", "tg-place", 7100, 7100, 4.2],
+  ["Napha Place", "napha-place", 6500, 6500, 1.7],
+  ["Ratchaprapa Mansion", "ratchaprapa-mansion", 4500, 6500, 3.4],
+  ["SPP PLACE", "spp-place", 4500, 5000, 1.8]
+];
+
+window.INITIAL_DORMS = RENTHUB_LISTINGS.map(([
+  name, slug, price, priceMax, distanceKm, type = "หอพักรายเดือน"
+], index) => ({
+  id: 1001 + index,
+  name,
+  zone: "ใกล้ มจพ. (อ้างอิง RentHub)",
+  type,
+  price,
+  priceMax,
+  elecRate: null,
+  waterEst: null,
+  distance: `${distanceKm.toLocaleString("th-TH")} กิโลเมตรจาก มจพ. ตามหน้ารวมประกาศ`,
+  contact: "รอตรวจสอบรายละเอียดและช่องทางติดต่อจากประกาศต้นทาง",
+  sourceName: "RentHub",
+  sourceUrl: `https://www.renthub.in.th/en/${slug}`,
+  imageUrls: [],
+  tags: [],
+  availability: "unknown",
+  desc: "นำเข้าข้อมูลเบื้องต้นแล้ว รอตรวจสอบราคา รายละเอียด และห้องว่างก่อนเผยแพร่",
+  sponsored: false,
+  published: false
+}));
+
+window.INITIAL_DORMS.push(
+  {
+    id: 2026102701,
+    name: "ลุมพินี วิลล์ พิบูลสงคราม-ริเวอร์วิว",
+    zone: "ถนนพิบูลสงคราม / บางซื่อ",
+    type: "คอนโดปล่อยเช่า",
+    price: 7500,
+    priceMax: 7500,
+    elecRate: null,
+    waterEst: null,
+    distance: "1.9 กม. จาก มจพ. และใกล้ MRT บางโพ ตามข้อความในโพสต์",
+    contact: "092-274-4643 / inbox ตามโพสต์",
+    sourceName: "กลุ่ม KMUTNB Community · Jao Patcharawarin",
+    sourceUrl: "https://www.facebook.com/groups/197822284350539/posts/2285017268964353/",
+    imageUrls: [],
+    photoUrls: [
+      "https://www.facebook.com/photo/?fbid=28240416622280340&set=pcb.2285017268964353",
+      "https://www.facebook.com/photo/?fbid=28240416562280346&set=pcb.2285017268964353",
+      "https://www.facebook.com/photo/?fbid=28240416575613678&set=pcb.2285017268964353",
+      "https://www.facebook.com/photo/?fbid=28240417045613631&set=pcb.2285017268964353",
+      "https://www.facebook.com/photo/?fbid=28240416965613639&set=pcb.2285017268964353"
+    ],
+    mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("ลุมพินี วิลล์ พิบูลสงคราม-ริเวอร์วิว")}`,
+    tags: ["1 ห้องนอน", "1 ห้องน้ำ", "28 ตร.ม.", "แอร์ 2 เครื่อง", "เฟอร์นิเจอร์", "สระว่ายน้ำ", "ฟิตเนส", "co-working space"],
+    availability: "unknown",
+    desc: "ประกาศระบุค่าเช่า 7,500 บาท/เดือน ห้อง 28 ตร.ม. ชั้น 9 สัญญาขั้นต่ำ 1 ปี ระยะทาง 1.9 กม. จาก มจพ. และใกล้ MRT บางโพ โพสต์แสดงวันที่ 12 ต.ค. (ไม่เห็นปีในผลค้นหา) สถานะห้องว่างยังไม่ยืนยัน ลิงก์แผนที่เป็นการค้นหาจากชื่อโครงการ ไม่ใช่หมุดห้องที่ตรวจยืนยันแล้ว โปรดตรวจสอบกับผู้โพสต์ก่อนเผยแพร่",
+    sponsored: false,
+    published: false
+  },
+  {
+    id: 2026102702,
+    name: "ทาวน์เฮาส์ให้เช่า วงศ์สว่าง 19",
+    zone: "MRT วงศ์สว่าง / ถนนวงศ์สว่าง",
+    type: "บ้านเช่า/ทาวน์เฮาส์",
+    price: 10000,
+    priceMax: 10000,
+    elecRate: null,
+    waterEst: null,
+    distance: "วงศ์สว่าง 19 บางซื่อ ใกล้แยกวงศ์สว่างและ Big C ตามข้อความในโพสต์",
+    contact: "089-030-4671 โทรสอบถามตามโพสต์",
+    sourceName: "กลุ่ม KMUTNB Community · Tha Vi",
+    sourceUrl: "https://www.facebook.com/groups/197822284350539/posts/2300194957446584/",
+    imageUrls: [],
+    photoUrls: [
+      "https://www.facebook.com/photo/?fbid=28875633985382251&set=pcb.2300194957446584",
+      "https://www.facebook.com/photo/?fbid=28875634362048880&set=pcb.2300194957446584"
+    ],
+    mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("ซอยวงศ์สว่าง 19 บางซื่อ กรุงเทพมหานคร")}`,
+    tags: ["2 ห้องนอน", "2 ห้องน้ำ", "ห้องครัว", "แอร์ 2 เครื่อง", "ตู้เย็น", "กล้องวงจรปิด"],
+    availability: "unknown",
+    desc: "ประกาศระบุค่าเช่า 10,000 บาท/เดือน ทำสัญญาปีต่อปี มัดจำล่วงหน้า 2 เดือน โพสต์แสดงวันที่ 7 ต.ค. เวลา 16:35 (ไม่เห็นปีในผลค้นหา) ยังไม่ยืนยันว่าบ้านว่างอยู่หรือไม่ ลิงก์แผนที่เป็นการค้นหาซอยจากข้อความในโพสต์ ไม่มีบ้านเลขที่หรือหมุดยืนยัน โปรดโทรตรวจสอบก่อนเผยแพร่",
+    sponsored: false,
+    published: false
+  }
+);
